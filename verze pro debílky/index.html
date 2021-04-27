@@ -19,21 +19,20 @@
 <body>
 	<div id="inputoutput"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
 	<button onclick="calculate()">Calculate</button><br>
-	<textarea rows="4" cols="50">"U"/"I"-"Z"
-"Y""Z"-1
-0.159154943091895/"f""L"-"Bl"
-6.2831853071795"f""C"/"Bc"-1
-"Ic"-"Il"-"Ic-Il"
-"I""I"-"Ic-Il""Ic-Il"-"Ir""Ir"
-"R""G"-1
-"Xc""Bc"-1
-"Xl""Bl"-1
-"U"/"Ir"-"R"
-"U"/"Il"-"Xl"
-"U"/"Ic"-"Xc"</textarea>
+	<textarea rows="4" cols="50">"Napětí"/"Proud zdroje"-"Impedance obvodu"
+"Admitace obvodu""Impedance obvodu"-1
+0.159154943091895/"Frekvence""Indukčnost"-"Indukční susceptace"
+6.2831853071795"Frekvence""Kapacita"/"Kapacitní suceptace"-1
+"Proud na kapacitátoru"-"Proud na cívce"-"Proud na kapacitátoru-Proud na cívce"
+"Proud zdroje""Proud zdroje"-"Proud na kapacitátoru-Proud na cívce""Proud na kapacitátoru-Proud na cívce"-"Proud na rezistoru""Proud na rezistoru"
+"Odpor rezistoru""Vodivost odporu"-1
+"Kapacitní reaktance""Kapacitní suceptace"-1
+"Indukční reaktance""Indukční susceptace"-1
+"Napětí"/"Proud na rezistoru"-"Odpor rezistoru"
+"Napětí"/"Proud na cívce"-"Indukční reaktance"
+"Napětí"/"Proud na kapacitátoru"-"Kapacitní reaktance"</textarea>
 	<br><button onclick="newequations()">new equations</button>erase input and output
 	<br><span id="postup"></span>
-	<a href="verze pro debílky/">verze pro ty co ani nepoznají písmena</a>
 	<script>
 		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 		let variabletononsense = {}
