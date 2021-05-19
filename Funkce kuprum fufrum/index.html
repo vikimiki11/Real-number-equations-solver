@@ -30,7 +30,16 @@
 "Xl""Bl"-1
 "U"/"Ir"-"R"
 "U"/"Il"-"Xl"
-"U"/"Ic"-"Xc"</textarea>
+"U"/"Ic"-"Xc"
+"A"-sin("L")
+"B"-cos("L")
+"C"-tan("L")
+"Aa"-asin("L")
+"Ba"-acos("L")
+"Ca"-atan("L")
+"Ab"-asin("A")
+"Bb"-acos("B")
+"Cb"-atan("C")</textarea>
 	<br><button onclick="newequations()">new equations</button>erase input and output
 	<br><span id="postup"></span>
 	<script>
@@ -111,8 +120,16 @@
 			while (change) {
 				change = false
 				for (let frak in libequations) {
+					console.log(frak)
+					console.log("před dosazením")
+					console.log(JSON.parse(JSON.stringify(libequations[frak])))
+					console.log(libequations[frak].print())
 					libequations[frak].appoint(nonsensetovalue)
+					console.log("po dosazením")
+					console.log(libequations[frak])
 					let temp = libequations[frak].evaluate()
+					console.log("výsledek mimo lib")
+					console.log(temp)
 					if (temp) {
 						change = true
 						document.querySelector("#postup").innerHTML += replace(solver.new(equations[parseInt(frak)]).print())+"\t\t=>\t\t" + replacetoval(solver.new(equations[parseInt(frak)]).print()) + "\t\t=>\t\t" +nonsensetovariable[temp[0]]+"="+(temp[1].numerator / temp[1].denominator)+ "\n<br>"

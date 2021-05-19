@@ -91,6 +91,8 @@ solver = {
 		constructor() {
 			this.type = "expression"
 			this.terms = {}
+			this.mask = {}
+			this.maskback = {}
 		}
 		evaluate() {
 			this.terms = Object.keys(this.terms).sort().reduce(
@@ -118,15 +120,36 @@ solver = {
 						this.terms[""] = this.terms[""].divide(temp)
 						this.terms[variablestringif] = this.terms[variablestringif].divide(temp)
 						this.terms[""] = this.terms[""].multiply(new solver.term(-1, 1, {}))
-						return [variable, this.terms[""].power(1 / this.terms[variablestringif].variables[variable])]
+						let temp2 = this.terms[""].power(1 / this.terms[variablestringif].variables[variable])
+						if (this.mask[variable]) {
+							temp2.numerator = solver.functions[this.mask[variable][0]][0](temp2.numerator / temp2.denominator)
+							temp2.denominator=1
+							return [this.mask[variable][1],temp2]
+						} else {
+							return [variable,temp2]
+						}
 					}
 				}
 			}
 		}
 		appoint(x) {
+			let temp2={}
+			for (let i in x) {
+				temp2[(this.maskback[i] ? this.maskback[i][1] : i)]=(this.maskback[i]?solver.functions[this.maskback[i][0]][0](x[i]):x[i])
+			}
+			if (!solver.f.same(x, temp2)) {
+				console.log("úprava před dosazením dosazení")
+				console.group()
+				console.log(x)
+				console.log(temp2)
+				console.groupEnd()
+			}
 			for (let i in this.terms) {
-				let temp = this.terms[i].appoint(x)
+				let temp = this.terms[i].appoint(temp2)
+				console.log("dosazení")
+				console.log(temp)
 				if (temp) {
+					console.log(this)
 					delete this.terms[i]
 					this.add(temp, true)
 				}
@@ -155,6 +178,8 @@ solver = {
 					retex.terms[ex.stringvariables] = ex
 				}
 			}
+			Object.assign(retex.mask, ex.mask)
+			Object.assign(retex.maskback, ex.maskback)
 			return retex
 		}
 		multiply(ex) {
@@ -164,6 +189,8 @@ solver = {
 					endex.addtoex(this.terms[i].multiply(ex.terms[y]))
 				}
 			}
+			Object.assign(endex.mask, ex.mask,this.mask)
+			Object.assign(endex.maskback, ex.maskback,this.maskback)
 			return endex
 		}
 		divide(ex) {
@@ -173,6 +200,8 @@ solver = {
 					endex.addtoex(this.terms[i].divide(ex.terms[y]))
 				}
 			}
+			Object.assign(endex.mask, ex.mask, this.mask)
+			Object.assign(endex.maskback, ex.maskback, this.maskback)
 			return endex
 		}
 		addtoex(ex, rotate, minus) {
@@ -205,14 +234,46 @@ solver = {
 					let num
 					if (num = ex.match(/([0-9]+[.][0-9]+)|([0-9]+)/y)) { num = num[0] } else { num = "1" }
 					let temp = ex.replace(num, "")
+					//Mark:Redo this functions
 					let variables = {}
-					for (let i of temp) {
+					while (temp.length > 0) {
+						let i = temp[0]
+						let temp2 = i
+						let zmena=false
+						Ahoj:for (let y in solver.functions) {
+							if (temp[y.length] == "(") {
+								for (let x in y) {
+									if(y[x]!=temp[x])continue Ahoj
+								}
+								i = ""
+								let zavorka = false
+								let temp3=""
+								while (temp[0] != ")") {
+									i+=temp[0]
+									if (temp[0] == "(") zavorka = true
+									temp = temp.replace(temp[0], "")
+									if(zavorka)temp3+=temp[0]
+								}
+								i += temp[0]
+								temp = temp.replace(temp[0], "")
+								zmena = [y, temp3.replace(/[)]$/, "")]
+								break
+							}
+						}
+						if(!zmena)temp=temp.replace(i,"")
 						if (variables[i]) {
+							if (zmena)console.error("WIP")
 							variables[i]++
 						} else {
+							if (zmena) {
+								this.mask[i] = [solver.functions[zmena[0]][1],zmena[1]]
+								this.maskback[zmena[1]] = [zmena[0],i]
+							}
 							variables[i] = 1
+							
 						}
 					}
+					
 					if (num.includes(".")) {
 						let i
 						for (i = 1; i < num.length; i++) {
@@ -273,7 +334,7 @@ solver = {
 				return new solver.term(Math.pow(this.numerator[0], x), Math.pow(this.denominator[0], x), retvars)
 			}
 		}
-		appoint(x) {
+		appoint(x) {//ToDo:tranformuj!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			let retterm = new solver.term(this.numerator[0], this.denominator[0], this.variables)
 			let change = false
 			/* let retvariables = {} */
@@ -301,6 +362,7 @@ solver = {
 		stringify() {
 			let string = ""
 			let first = true
+			//Mark:možna
 			this.variables = Object.keys(this.variables).sort().reduce(
 				(obj, key) => {
 					obj[key] = this.variables[key];
@@ -397,6 +459,14 @@ solver = {
 				return true
 			} else { return x === y }
 		}
+	},
+	functions: {
+		"cos": [Math.cos, "acos"],
+		"sin": [Math.sin, "asin"],
+		"tan": [Math.tan, "atan"],
+		"acos": [Math.acos, "cos"],
+		"asin": [Math.asin, "sin"],
+		"atan": [Math.atan, "tan"]
 	}
 }
 //Mark:test ^
