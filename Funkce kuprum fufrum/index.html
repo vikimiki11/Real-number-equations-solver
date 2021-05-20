@@ -40,7 +40,7 @@
 			position: relative;
 			top: 0em !important;
 		}
-		div#GUI>div:nth-child(5)>button.add{
+		div#GUI>div:nth-child(7)>button.add{
 			display: none ;
 		}
 		div#GUI>div:nth-child(2)>button.remove{
@@ -50,19 +50,25 @@
 			position: relative;
 			top: -3em;
 		}
+		.debug{
+			display: auto;
+		}
+		div#output>div,div#GUI>div{
+			margin: 0 2rem;
+		}
 	</style>
 	<script src="Real-number-equations-solver.js"></script>
 </head>
 
 <body>
-	<div id="inputoutput"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
+	<div id="inputoutput" class="debug"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
 	<button onclick="calculate()">Calculate</button><br>
-	<textarea rows="4" cols="50">"U"/"I1"-"Z1"
+	<textarea rows="4" cols="50" class="debug">"U"/"I1"-"Z1"
 0.159154943091895/"f""L1"-1/"Xl1"
 6.2831853071795"f""C1""Xc1"-1
 
 </textarea>
-	<br><button onclick="newequations()">new equations</button>erase input and output
+	<br><span class="debug"><button onclick="newequations()">new equations</button>erase input and output</span>
 	<br><span id="postup"></span><br>
 	<div id="GUI">
 		<div id="suply">
@@ -114,6 +120,7 @@
 			<span>L</span><input class="L">H
 			<br><button class="remove"onclick="remove()">remove</button><button class="add"onclick="add()">add</button>
 		</div></div>
+		<div id="output"></div>
 	<script>
 		let paralels = 3
 		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é", "ú", "ů", "§", "¨", "Ě", "Š", "Č", "Ř", "Ž", "Ý", "Á", "Í", "É", "Ú", "Ů", "☺", "☻"]
@@ -187,6 +194,28 @@
 					nonsensetovalue[i] = parseFloat(temp)
 				}
 			}
+			let temp= document.querySelectorAll("div#GUI div")
+			for(let i in temp){
+				try {
+					let temp1 = ""
+					if (temp[i].id[0] != "s") {
+						temp1 = temp[i].id.replace("v", "")
+					}
+					let temp2 = document.querySelectorAll("div#GUI div#" + temp[i].id + " input")
+					for (i in temp2) {
+						try {
+							let temp = temp2[i].value.replaceAll(",", ".").trim()
+							if (temp != "") {
+								nonsensetovalue[variabletononsense[temp1 + temp2[i].className]] = parseFloat(temp)
+							}
+						} catch (error) {
+
+						}
+					}
+				} catch (error) {
+					
+				}
+			}
 			for (let i in nonsensetovariable) {
 				document.querySelector("h2#" + i).innerHTML = ""
 			}
@@ -195,16 +224,16 @@
 				change = false
 				let copy=[...libequations]
 				for (let frak in libequations) {
-					console.log(frak)
+					/* console.log(frak)
 					console.log("před dosazením")
 					console.log(JSON.parse(JSON.stringify(libequations[frak])))
-					console.log(libequations[frak].print())
+					console.log(libequations[frak].print()) */
 					libequations[frak].appoint(nonsensetovalue)
-					console.log("po dosazením")
-					console.log(libequations[frak])
+					/* console.log("po dosazením")
+					console.log(libequations[frak]) */
 					let temp = libequations[frak].evaluate()
-					console.log("výsledek mimo lib")
-					console.log(temp)
+					/* console.log("výsledek mimo lib")
+					console.log(temp) */
 					if (temp) {
 						delete copy[frak]
 						change = true
@@ -251,9 +280,9 @@
 		}
 		function assamble() {
 			let universaleqs = `"U"/"?I"-"?Z"
-0.159154943091895/"f""?L"-1/"?Xl"
+0.159154943091895/"f"/"?L"*"?Xl"-1
 6.2831853071795"f""?C""?Xc"-1
-"?Xc"+"?Xl"-"?Xc-Xl"
+"?Xc"-"?Xl"-"?Xc-Xl"
 "?Z""?Z"-"?Xc-Xl""?Xc-Xl"-"?R""?R"
 "?R"/"?Z"*"?I"-"?x"
 "?Xc-Xl"/"?Z"*"?I"-"?y"
@@ -264,7 +293,7 @@ sin("?Úhel")-"?Xc-Xl"/"?Z"
 			let eqsendx = '0-"x"'
 			let eqsend=`
 "I""I"-"x""x"-"y""y"
-sin("Úhel")-"y"/"I"`
+tan("Úhel")-"y"/"x"`
 			let i = 1
 			while (document.querySelector("div#GUI>div#v" + i)) {
 				eqs += universaleqs.replaceAll("?", i)
@@ -277,6 +306,5 @@ sin("Úhel")-"y"/"I"`
 		}
 		assamble()
 	</script>
-	</body>
-	
+	</body>	
 	</html>

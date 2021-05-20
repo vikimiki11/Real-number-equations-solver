@@ -145,19 +145,9 @@ solver = {
 			for (let i in x) {
 				temp2[(this.maskback[i] ? this.maskback[i][1] : i)]=(this.maskback[i]?solver.functions[this.maskback[i][0]][0](x[i]):x[i])
 			}
-			if (!solver.f.same(x, temp2)) {
-				console.log("úprava před dosazením dosazení")
-				console.group()
-				console.log(x)
-				console.log(temp2)
-				console.groupEnd()
-			}
 			for (let i in this.terms) {
 				let temp = this.terms[i].appoint(temp2)
-				console.log("dosazení")
-				console.log(temp)
 				if (temp) {
-					console.log(this)
 					delete this.terms[i]
 					this.add(temp, true)
 				}
