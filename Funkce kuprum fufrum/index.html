@@ -256,7 +256,8 @@
 			let print="<div><h1>Zdroj</h1>"
 			for(let i of ["U","f","I","Úhel","x","y"]){
 				try {
-					if (i == "Úhel") { nonsensetovalue[variabletononsense[i]] = toDegrees(nonsensetovalue[variabletononsense[i]]) }
+					if (i == "Úhel") { nonsensetovalue[variabletononsense[i]] = toDegrees(nonsensetovalue[variabletononsense[i]])*-1 }
+					if(nonsensetovalue[variabletononsense[i]]<1e-80) nonsensetovalue[variabletononsense[i]]=0
 					print += "<span>"+i+"="+nonsensetovalue[variabletononsense[i]]+" "+jednotky[i]+"</span><br>"
 				} catch (error) {
 					
@@ -268,7 +269,8 @@
 				print+="<div><h1>"+i+". Větev</h1>"
 				for(let y of ["I", "Úhel", "Z", "Xl", "Xc", "x", "y", "R", "C", "L"]) {
 					try {
-						if(y=="Úhel"){ nonsensetovalue[variabletononsense[i + y]]= toDegrees(nonsensetovalue[variabletononsense[i + y]])}
+						if(y=="Úhel"){ nonsensetovalue[variabletononsense[i + y]]= toDegrees(nonsensetovalue[variabletononsense[i + y]])*-1}
+						if (nonsensetovalue[variabletononsense[i + y]] < 1e-80) nonsensetovalue[variabletononsense[i + y]] = 0
 						print += "<span>" + y + "=" + nonsensetovalue[variabletononsense[i+y]] + " " + jednotky[y] + "</span><br>"
 					} catch (error) {
 
