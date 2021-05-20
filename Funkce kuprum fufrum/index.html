@@ -123,6 +123,7 @@
 		<div id="output"></div>
 	<script>
 		let paralels = 3
+		let jednotky = {U:"V",f:"Hz",I:"A",Úhel:"deg",x:"A",y:"A",Z:"ohm",Xl:"ohm",Xc: "ohm",R: "ohm",C:"F",L:"H"}
 		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é", "ú", "ů", "§", "¨", "Ě", "Š", "Č", "Ř", "Ž", "Ý", "Á", "Í", "É", "Ú", "Ů", "☺", "☻"]
 		let variabletononsense = {}
 		let nonsensetovariable = {}
@@ -208,6 +209,8 @@
 							if (temp != "") {
 								if (temp2[i].className == "C" && temp== 0) { temp = "1e99" }
 								if (temp2[i].className == "L" && temp== 0) { temp = "1e-99" }
+								if (temp2[i].className == "R" && temp == 0) { temp = "1e-99" }
+								if (temp2[i].className == "Úhel") { temp = toRadians(parseFloat(temp)) }
 								nonsensetovalue[variabletononsense[temp1 + temp2[i].className]] = parseFloat(temp)
 							}
 						} catch (error) {
@@ -253,7 +256,8 @@
 			let print="<div><h1>Zdroj</h1>"
 			for(let i of ["U","f","I","Úhel","x","y"]){
 				try {
-					print += "<span>"+i+"="+nonsensetovalue[variabletononsense[i]]+"</span><br>"
+					if (y == "Úhel") { nonsensetovalue[variabletononsense[i]] = toDegrees(nonsensetovalue[variabletononsense[i]]) }
+					print += "<span>"+i+"="+nonsensetovalue[variabletononsense[i]]+" "+jednotky[i]+"</span><br>"
 				} catch (error) {
 					
 				}
@@ -264,7 +268,8 @@
 				print+="<div><h1>"+i+". Větev</h1>"
 				for(let y of ["I", "Úhel", "Z", "Xl", "Xc", "x", "y", "R", "C", "L"]) {
 					try {
-						print += "<span>" + y + "=" + nonsensetovalue[variabletononsense[i+y]] + "</span><br>"
+						if(y=="Úhel"){ nonsensetovalue[variabletononsense[i + y]]= toDegrees(nonsensetovalue[variabletononsense[i + y]])}
+						print += "<span>" + y + "=" + nonsensetovalue[variabletononsense[i+y]] + " " + jednotky[y] + "</span><br>"
 					} catch (error) {
 
 					}
@@ -328,6 +333,12 @@ tan("Úhel")-"y"/"x"`
 			}
 			document.querySelector("textarea").value = eqs + eqsendx + "\n" + eqsendy + eqsend
 			newequations()
+		}
+		function toRadians(degrees) {
+			return degrees * (Math.PI / 180);
+		}
+		function toDegrees(radians) {
+			return radians * (180 / Math.PI);
 		}
 		assamble()
 	</script>
