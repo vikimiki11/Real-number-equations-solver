@@ -116,6 +116,14 @@ solver = {
 					}
 					if (calc == 1) {
 						for (let i in variable) variable = i
+						if (this.mask[variable]) {
+							try {
+								solver.functions[this.mask[variable][0]][0]
+							} catch (error) {
+								console.warn("try to go backward on onway function")
+								return
+							}
+						}
 						let temp = new solver.term(this.terms[variablestringif].numerator[0], this.terms[variablestringif].denominator[0], {})
 						this.terms[""] = this.terms[""].divide(temp)
 						this.terms[variablestringif] = this.terms[variablestringif].divide(temp)
@@ -458,6 +466,9 @@ solver = {
 				}
 				return true
 			} else { return x === y }
+		},
+		pol: function (x) {
+			return x/Math.abs(x)
 		}
 	},
 	functions: {
@@ -467,7 +478,8 @@ solver = {
 		"acos": [Math.acos, "cos"],
 		"asin": [Math.asin, "sin"],
 		"atan": [Math.atan, "tan"],
-		"abs": [Math.abs, "abs"]
+		"abs": [Math.abs, "abs"],
+		"pol": [function (x) {return x / Math.abs(x)},undefined]
 	}
 }
 //Mark:test ^

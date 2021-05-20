@@ -99,7 +99,7 @@
 			<span>Xl</span><input class="Xl">ohm<br>
 			<span>L</span><input class="L">H
 			<br><button class="remove"onclick="remove()">remove</button><button class="add"onclick="add()">add</button>
-		</div><div class="větev" id="v1">
+		</div><div class="větev" id="v3">
 			<h1>Větev</h1>
 			<span>Úhel</span><input class="Úhel">rad<br>
 			<span>Z</span><input class="Z">ohm<br>
@@ -126,7 +126,7 @@
 			vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é", "ú", "ů", "§", "¨", "Ě", "Š", "Č", "Ř", "Ž", "Ý", "Á", "Í", "É", "Ú", "Ů", "☺", "☻"]
 			variabletononsense = {}
 			nonsensetovariable = {}
-			let input = document.querySelector("textarea").value.trim().replaceAll("\t","").replaceAll("	", "")
+			let input = document.querySelector("textarea").value.trim().replaceAll("\t", "").replaceAll("	", "")
 			input = input.split("\n")
 			equations = []
 			for (let i of input) {
@@ -141,7 +141,7 @@
 							if (variabletononsense[inbracket]) {
 								temp = variabletononsense[inbracket]
 							} else {
-								if(vars.length==0)console.error("out of variables")
+								if (vars.length == 0) console.error("out of variables")
 								temp = vars.pop()
 								nonsensetovariable[temp] = inbracket
 								variabletononsense[inbracket] = temp
@@ -174,7 +174,7 @@
 			document.querySelector("#inputoutput").innerHTML = print
 		}
 		function calculate() {
-			document.querySelector("#postup").innerHTML=""
+			document.querySelector("#postup").innerHTML = ""
 			let change = true
 			nonsensetovalue = {}
 			libequations = []
@@ -188,11 +188,12 @@
 				}
 			}
 			for (let i in nonsensetovariable) {
-				document.querySelector("h2#" + i).innerHTML=""
+				document.querySelector("h2#" + i).innerHTML = ""
 			}
 			start = false
 			while (change) {
 				change = false
+				let copy=[...libequations]
 				for (let frak in libequations) {
 					console.log(frak)
 					console.log("před dosazením")
@@ -205,65 +206,77 @@
 					console.log("výsledek mimo lib")
 					console.log(temp)
 					if (temp) {
+						delete copy[frak]
 						change = true
-						document.querySelector("#postup").innerHTML += replace(solver.new(equations[parseInt(frak)]).print())+"\t\t=>\t\t" + replacetoval(solver.new(equations[parseInt(frak)]).print()) + "\t\t=>\t\t" +nonsensetovariable[temp[0]]+"="+(temp[1].numerator / temp[1].denominator)+ "\n<br>"
+						document.querySelector("#postup").innerHTML += replace(solver.new(equations[parseInt(frak)]).print()) + "\t\t=>\t\t" + replacetoval(solver.new(equations[parseInt(frak)]).print()) + "\t\t=>\t\t" + nonsensetovariable[temp[0]] + "=" + (temp[1].numerator / temp[1].denominator) + "\n<br>"
 						nonsensetovalue[temp[0]] = temp[1].numerator / temp[1].denominator
 					}
 				}
+				var libequations = copy.filter(function (el) {
+					return el != null;
+				});
 			}
 			for (i in nonsensetovalue) {
 				document.querySelector("h2#" + i).innerHTML = nonsensetovalue[i]
 			}
 		}
-		function replace(ret){
-			for(i in nonsensetovariable){
-				ret=ret.replaceAll(i,nonsensetovariable[i])
+		function replace(ret) {
+			for (i in nonsensetovariable) {
+				ret = ret.replaceAll(i, nonsensetovariable[i])
 			}
 			return ret
 		}
 		function replacetoval(ret) {
 			for (i in nonsensetovalue) {
-				ret = ret.replaceAll(i, "\""+nonsensetovalue[i]+ "\"")
+				ret = ret.replaceAll(i, "\"" + nonsensetovalue[i] + "\"")
 			}
 			return replace(ret)
 		}
 		newequations()
 		let Gui = document.querySelector("div#GUI")
-		function add(){
+		function add() {
 			Gui.appendChild(Gui.lastChild.cloneNode(true))
 			paralels++
-			let i=1
-			while(document.querySelector("div#GUI>div#v" + i)){
+			let i = 1
+			while (document.querySelector("div#GUI>div#v" + i)) {
 				i++
 			}
-			Gui.lastChild.id="v"+i
+			Gui.lastChild.id = "v" + i
 			assamble()
 		}
-		function remove(){
+		function remove() {
 			paralels--
 			Gui.removeChild(Gui.lastChild)
 			assamble()
 		}
-		function assamble(){
-			let universaleqs=`"U"/"?I"-"?Z"
+		function assamble() {
+			let universaleqs = `"U"/"?I"-"?Z"
 0.159154943091895/"f""?L"-1/"?Xl"
 6.2831853071795"f""?C""?Xc"-1
-"?Xc"-"?Xl"-"?Xc-Xl"
+"?Xc"+"?Xl"-"?Xc-Xl"
 "?Z""?Z"-"?Xc-Xl""?Xc-Xl"-"?R""?R"
 "?R"/"?Z"*"?I"-"?x"
 "?Xc-Xl"/"?Z"*"?I"-"?y"
-`			
-			let eqs =""
+sin("?Úhel")-"?Xc-Xl"/"?Z"
+`
+			let eqs = ""
+			let eqsendy = '0-"y"'
+			let eqsendx = '0-"x"'
+			let eqsend=`
+"I""I"-"x""x"-"y""y"
+sin("Úhel")-"y"/"I"`
 			let i = 1
-			while(document.querySelector("div#GUI>div#v"+i)){
-				eqs+=universaleqs.replaceAll("?",i)
+			while (document.querySelector("div#GUI>div#v" + i)) {
+				eqs += universaleqs.replaceAll("?", i)
+				eqsendy += "+\"" + i + "y\""
+				eqsendx += "+\"" + i + "x\""
 				i++
 			}
-			document.querySelector("textarea").value=eqs
+			document.querySelector("textarea").value = eqs + eqsendx + "\n" + eqsendy + eqsend
 			newequations()
 		}
 		assamble()
 	</script>
-</body>
-
-</html>
+	</body>
+	
+	</html>
