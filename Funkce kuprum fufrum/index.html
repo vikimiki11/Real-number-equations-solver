@@ -256,7 +256,7 @@
 			let print="<div><h1>Zdroj</h1>"
 			for(let i of ["U","f","I","Úhel","x","y"]){
 				try {
-					if (y == "Úhel") { nonsensetovalue[variabletononsense[i]] = toDegrees(nonsensetovalue[variabletononsense[i]]) }
+					if (i == "Úhel") { nonsensetovalue[variabletononsense[i]] = toDegrees(nonsensetovalue[variabletononsense[i]]) }
 					print += "<span>"+i+"="+nonsensetovalue[variabletononsense[i]]+" "+jednotky[i]+"</span><br>"
 				} catch (error) {
 					
