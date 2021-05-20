@@ -12,6 +12,44 @@
 			width: 20rem;
 			height: 8rem;
 		}
+		div#GUI>div{
+			display: inline-block;
+		}
+		div#GUI>div>*{
+			height: 3rem;
+		}
+		div>span{
+			width: 10rem;
+			font-size: 2rem;
+			font-weight: bold;
+		}
+		hr{
+			height: auto !important;
+		}
+		div#GUI button.add{
+			display: none;
+		}
+		div#GUI>div:first-child{
+			position: relative;
+			top: -26.5rem;
+		}
+		div#GUI>div:last-child>button.add{
+			display: inline-block;
+		}
+		div#GUI>div:last-child{
+			position: relative;
+			top: 0em !important;
+		}
+		div#GUI>div:nth-child(5)>button.add{
+			display: none ;
+		}
+		div#GUI>div:nth-child(2)>button.remove{
+			display: none;
+		}
+		div#GUI>div:nth-child(2){
+			position: relative;
+			top: -3em;
+		}
 	</style>
 	<script src="Real-number-equations-solver.js"></script>
 </head>
@@ -19,38 +57,73 @@
 <body>
 	<div id="inputoutput"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
 	<button onclick="calculate()">Calculate</button><br>
-	<textarea rows="4" cols="50">"U"/"I"-"Z"
-"Y""Z"-1
-0.159154943091895/"f""L"-"Bl"
-6.2831853071795"f""C"/"Bc"-1
-"Ic"-"Il"-"Ic-Il"
-"I""I"-"Ic-Il""Ic-Il"-"Ir""Ir"
-"R""G"-1
-"Xc""Bc"-1
-"Xl""Bl"-1
-"U"/"Ir"-"R"
-"U"/"Il"-"Xl"
-"U"/"Ic"-"Xc"
-"A"-sin("L")
-"B"-cos("L")
-"C"-tan("L")
-"Aa"-asin("L")
-"Ba"-acos("L")
-"Ca"-atan("L")
-"Ab"-asin("A")
-"Bb"-acos("B")
-"Cb"-atan("C")</textarea>
+	<textarea rows="4" cols="50">"U"/"I1"-"Z1"
+0.159154943091895/"f""L1"-1/"Xl1"
+6.2831853071795"f""C1""Xc1"-1
+
+</textarea>
 	<br><button onclick="newequations()">new equations</button>erase input and output
-	<br><span id="postup"></span>
+	<br><span id="postup"></span><br>
+	<div id="GUI">
+		<div id="suply">
+			<h1>Zdroj</h1>
+			<span>U</span><input class="U"><br>
+			<span>f</span><input class="f"><br>
+			<span>I</span><input class="I">
+		</div>
+		<div class="větev" id="v1">
+			<h1>Větev</h1>
+			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Z</span><input class="Z">ohm<br>
+			<span>I</span><input class="I">A<br>
+			<hr><br>
+			<span>R</span><input class="R">ohm<br>
+			<hr><br>
+			<span>Xc</span><input class="Xc">ohm<br>
+			<span>C</span><input class="C">F<br>
+			<hr><br>
+			<span>Xl</span><input class="Xl">ohm<br>
+			<span>L</span><input class="L">H
+			<br><button class="remove" onclick="remove()">remove</button><button class="add" onclick="add()">add</button>
+		</div><div class="větev" id="v2">
+			<h1>Větev</h1>
+			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Z</span><input class="Z">ohm<br>
+			<span>I</span><input class="I">A<br>
+			<hr><br>
+			<span>R</span><input class="R">ohm<br>
+			<hr><br>
+			<span>Xc</span><input class="Xc">ohm<br>
+			<span>C</span><input class="C">F<br>
+			<hr><br>
+			<span>Xl</span><input class="Xl">ohm<br>
+			<span>L</span><input class="L">H
+			<br><button class="remove"onclick="remove()">remove</button><button class="add"onclick="add()">add</button>
+		</div><div class="větev" id="v1">
+			<h1>Větev</h1>
+			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Z</span><input class="Z">ohm<br>
+			<span>I</span><input class="I">A<br>
+			<hr><br>
+			<span>R</span><input class="R">ohm<br>
+			<hr><br>
+			<span>Xc</span><input class="Xc">ohm<br>
+			<span>C</span><input class="C">F<br>
+			<hr><br>
+			<span>Xl</span><input class="Xl">ohm<br>
+			<span>L</span><input class="L">H
+			<br><button class="remove"onclick="remove()">remove</button><button class="add"onclick="add()">add</button>
+		</div></div>
 	<script>
-		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+		let paralels = 3
+		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é", "ú", "ů", "§", "¨", "Ě", "Š", "Č", "Ř", "Ž", "Ý", "Á", "Í", "É", "Ú", "Ů", "☺", "☻"]
 		let variabletononsense = {}
 		let nonsensetovariable = {}
 		let nonsensetovalue = {}
 		let equations = []
 		let libequations = []
 		function newequations() {
-			vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]//, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+			vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "ě", "š", "č", "ř", "ž", "ý", "á", "í", "é", "ú", "ů", "§", "¨", "Ě", "Š", "Č", "Ř", "Ž", "Ý", "Á", "Í", "É", "Ú", "Ů", "☺", "☻"]
 			variabletononsense = {}
 			nonsensetovariable = {}
 			let input = document.querySelector("textarea").value.trim().replaceAll("\t","").replaceAll("	", "")
@@ -68,6 +141,7 @@
 							if (variabletononsense[inbracket]) {
 								temp = variabletononsense[inbracket]
 							} else {
+								if(vars.length==0)console.error("out of variables")
 								temp = vars.pop()
 								nonsensetovariable[temp] = inbracket
 								variabletononsense[inbracket] = temp
@@ -154,6 +228,41 @@
 			return replace(ret)
 		}
 		newequations()
+		let Gui = document.querySelector("div#GUI")
+		function add(){
+			Gui.appendChild(Gui.lastChild.cloneNode(true))
+			paralels++
+			let i=1
+			while(document.querySelector("div#GUI>div#v" + i)){
+				i++
+			}
+			Gui.lastChild.id="v"+i
+			assamble()
+		}
+		function remove(){
+			paralels--
+			Gui.removeChild(Gui.lastChild)
+			assamble()
+		}
+		function assamble(){
+			let universaleqs=`"U"/"?I"-"?Z"
+0.159154943091895/"f""?L"-1/"?Xl"
+6.2831853071795"f""?C""?Xc"-1
+"?Xc"-"?Xl"-"?Xc-Xl"
+"?Z""?Z"-"?Xc-Xl""?Xc-Xl"-"?R""?R"
+"?R"/"?Z"*"?I"-"?x"
+"?Xc-Xl"/"?Z"*"?I"-"?y"
+`			
+			let eqs =""
+			let i = 1
+			while(document.querySelector("div#GUI>div#v"+i)){
+				eqs+=universaleqs.replaceAll("?",i)
+				i++
+			}
+			document.querySelector("textarea").value=eqs
+			newequations()
+		}
+		assamble()
 	</script>
 </body>
 

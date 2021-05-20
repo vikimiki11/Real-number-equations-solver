@@ -466,7 +466,8 @@ solver = {
 		"tan": [Math.tan, "atan"],
 		"acos": [Math.acos, "cos"],
 		"asin": [Math.asin, "sin"],
-		"atan": [Math.atan, "tan"]
+		"atan": [Math.atan, "tan"],
+		"abs": [Math.abs, "abs"]
 	}
 }
 //Mark:test ^
