@@ -61,7 +61,7 @@
 
 <body>
 	<div id="inputoutput" class="debug"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
-	I když není rezistor, kondenzátor nebo cívka zapojená musíš napsat do R,C nebo L hodnotu 0. Nechat prázdné jen pokud se má vypočítat
+	I když není rezistor, kondenzátor nebo cívka zapojená musíš napsat do R,C nebo L hodnotu 0. Nechat prázdné jen pokud se má vypočítat. PS: už to bere a dává stupně a ne rady
 	<button onclick="calculate()">Calculate</button><br>
 	<textarea rows="4" cols="50" class="debug"></textarea>
 	<br><span class="debug"><button onclick="newequations()">new equations</button>erase input and output</span>
@@ -75,7 +75,7 @@
 		</div>
 		<div class="větev" id="v1">
 			<h1 onhashchange="console.log('test')">Větev</h1>
-			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Úhel</span><input class="Úhel">deg<br>
 			<span>Z</span><input class="Z">ohm<br>
 			<span>I</span><input class="I">A<br>
 			<hr><br>
@@ -89,7 +89,7 @@
 			<br><button class="remove" onclick="remove()">remove</button><button class="add" onclick="add()">add</button>
 		</div><div class="větev" id="v2">
 			<h1>Větev</h1>
-			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Úhel</span><input class="Úhel">deg<br>
 			<span>Z</span><input class="Z">ohm<br>
 			<span>I</span><input class="I">A<br>
 			<hr><br>
@@ -103,7 +103,7 @@
 			<br><button class="remove"onclick="remove()">remove</button><button class="add"onclick="add()">add</button>
 		</div><div class="větev" id="v3">
 			<h1>Větev</h1>
-			<span>Úhel</span><input class="Úhel">rad<br>
+			<span>Úhel</span><input class="Úhel">deg<br>
 			<span>Z</span><input class="Z">ohm<br>
 			<span>I</span><input class="I">A<br>
 			<hr><br>

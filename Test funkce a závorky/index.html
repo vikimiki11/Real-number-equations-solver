@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Real number equations solver</title>
+	<style>
+		h2 {
+			display: inline;
+			margin-inline: 2rem;
+		}
+		textarea{
+			width: 20rem;
+			height: 8rem;
+		}
+	</style>
+	<script src="Real-number-equations-solver.js"></script>
+</head>
+
+<body>
+	<div id="inputoutput"></div><br>pro zápis 23*10^-5 použíte 23e-5<br>
+	<button onclick="calculate()">Calculate</button><br>
+	<textarea rows="4" cols="50">"Napětí"/"Proud zdroje"-"Impedance obvodu"
+"Admitace obvodu""Impedance obvodu"-1
+0.159154943091895/"Frekvence""Indukčnost"-"Indukční susceptace"
+6.2831853071795"Frekvence""Kapacita"/"Kapacitní suceptace"-1
+"Proud na kapacitátoru"-"Proud na cívce"-"Proud na kapacitátoru-Proud na cívce"
+"Proud zdroje""Proud zdroje"-"Proud na kapacitátoru-Proud na cívce""Proud na kapacitátoru-Proud na cívce"-"Proud na rezistoru""Proud na rezistoru"
+"Odpor rezistoru""Vodivost odporu"-1
+"Kapacitní reaktance""Kapacitní suceptace"-1
+"Indukční reaktance""Indukční susceptace"-1
+"Napětí"/"Proud na rezistoru"-"Odpor rezistoru"
+"Napětí"/"Proud na cívce"-"Indukční reaktance"
+"Napětí"/"Proud na kapacitátoru"-"Kapacitní reaktance"</textarea>
+	<br><button onclick="newequations()">new equations</button>erase input and output
+	<br><span id="postup"></span>
+	<script>
+		let vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+		let variabletononsense = {}
+		let nonsensetovariable = {}
+		let nonsensetovalue = {}
+		let equations = []
+		let libequations = []
+		function newequations() {
+			vars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]//, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+			variabletononsense = {}
+			nonsensetovariable = {}
+			let input = document.querySelector("textarea").value.trim().replaceAll("\t","").replaceAll("	", "")
+			input = input.split("\n")
+			equations = []
+			for (let i of input) {
+				let bracket = false
+				let inbracket = ""
+				let equation = ""
+				for (let char of i) {
+					if (char == '"') {
+						if (bracket) {
+							let temp
+							if (inbracket == "inputoutput") alert("don't use inputoutput as var")
+							if (variabletononsense[inbracket]) {
+								temp = variabletononsense[inbracket]
+							} else {
+								temp = vars.pop()
+								nonsensetovariable[temp] = inbracket
+								variabletononsense[inbracket] = temp
+							}
+							equation += temp
+							inbracket = ""
+						}
+						bracket = !bracket
+					} else {
+						if (bracket) {
+							inbracket += char
+						} else {
+							equation += char
+						}
+					}
+				}
+				equations[equations.length] = equation
+			}
+			let print = ""
+			variabletononsense = Object.keys(variabletononsense).sort().reduce(
+				(obj, key) => {
+					obj[key] = variabletononsense[key];
+					return obj;
+				},
+				{}
+			);
+			for (let i in variabletononsense) {
+				print += `<div id="${variabletononsense[i]}"><h2>${i}:</h2><input><h2 id="${variabletononsense[i]}"></h2></div><br>\n`
+			}
+			document.querySelector("#inputoutput").innerHTML = print
+		}
+		function calculate() {
+			document.querySelector("#postup").innerHTML=""
+			let change = true
+			nonsensetovalue = {}
+			libequations = []
+			for (i of equations) {
+				libequations[libequations.length] = solver.new(i)
+			}
+			for (let i in nonsensetovariable) {
+				let temp = document.querySelector("div#" + i + " input").value.replaceAll(",", ".").trim()
+				if (temp != "") {
+					nonsensetovalue[i] = parseFloat(temp)
+				}
+			}
+			for (let i in nonsensetovariable) {
+				document.querySelector("h2#" + i).innerHTML=""
+			}
+			start = false
+			while (change) {
+				change = false
+				for (let frak in libequations) {
+					libequations[frak].appoint(nonsensetovalue)
+					let temp = libequations[frak].evaluate()
+					if (temp) {
+						change = true
+						document.querySelector("#postup").innerHTML += replace(solver.new(equations[parseInt(frak)]).print())+"\t\t=>\t\t" + replacetoval(solver.new(equations[parseInt(frak)]).print()) + "\t\t=>\t\t" +nonsensetovariable[temp[0]]+"="+(temp[1].numerator / temp[1].denominator)+ "\n<br>"
+						nonsensetovalue[temp[0]] = temp[1].numerator / temp[1].denominator
+					}
+				}
+			}
+			for (i in nonsensetovalue) {
+				document.querySelector("h2#" + i).innerHTML = nonsensetovalue[i]
+			}
+		}
+		function replace(ret){
+			for(i in nonsensetovariable){
+				ret=ret.replaceAll(i,nonsensetovariable[i])
+			}
+			return ret
+		}
+		function replacetoval(ret) {
+			for (i in nonsensetovalue) {
+				ret = ret.replaceAll(i, "\""+nonsensetovalue[i]+ "\"")
+			}
+			return replace(ret)
+		}
+		newequations()
+	</script>
+	<script src="primes.js"></script>
+</body>
+
+</html>
