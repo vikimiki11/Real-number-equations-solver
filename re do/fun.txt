@@ -1,0 +1,43 @@
+General
+you must put * between variables, numbers and functions
+you can't use ", ' or \ inside name of variables and functions
+you can't calculate some parameters of function
+
+Functions
+functions are string of any length starting with letter and ended by bracket on witch will be function aplicated
+hi1() valid
+1hi() invalid
+h1i() valid
+h1"i() invalid
+
+
+
+
+
+
+expression
+	type = "expression"
+	terms = {stringedTermWithoutMultiplier:class term}
+	expressions = {expressionsFromFuntions}
+
+term
+	type = "term"
+	expressions = inherit from class expression.expressions
+	variables = {"x":2, "y":1, "cos(\"x\"+\"y\"12,\"x\")":2, "stringifiedFunctionOrVariable":power}
+	multiply = 1 (any non zero number)
+
+new
+rozdělit dle + a - 
+jednotlivé části vypočítat a zkrátit
+
+expression.solve({variables:value},?expression)
+if(expression)this.minus(expression)
+
+
+
+!
+pow
+
+
+ToDo:
+copy

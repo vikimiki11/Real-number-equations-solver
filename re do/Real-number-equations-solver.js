@@ -1,5 +1,5 @@
 test = false
-solver = {
+const solver = {
 	/* cloneex: function (ex) {
 		let retex = new solver.expression()
 		for (let i in ex.terms) {
@@ -77,6 +77,21 @@ solver = {
 					}
 				}
 				return endobject
+			default:
+				console.error("wrong input")
+				break;
+		}
+	},
+	parse: function (ex) {
+		switch (typeof ex) {
+			case typeof {}:
+				//ToDo:input normal
+				break
+			case typeof 2:
+				ex = ex.toString()
+			case typeof "":
+
+				break
 		}
 	},
 	expression: class {//Mark:expression
@@ -468,6 +483,7 @@ solver = {
 		"asin": [Math.asin, "sin"],
 		"atan": [Math.atan, "tan"],
 		"abs": [Math.abs, "abs"],
-		"pol": [function (x) { return x / Math.abs(x) }, undefined]
+		"pol": [solver.f.pol,null],
+		"pow": [Math.pow,null]
 	}
 }
